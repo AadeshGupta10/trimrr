@@ -57,10 +57,7 @@ const Link = () => {
 
     const { mutate: mutateClick, isPending: PendingUrlClicks, data: stats } = useMutation({
         mutationKey: ["Get CLicks for Url"],
-        mutationFn: getClicksForUrl,
-        onSuccess: (res) => {
-            console.log(res)
-        }
+        mutationFn: getClicksForUrl
     })
 
     const { mutate: mutateDelete, isPending: loadingDelete } = useMutation({
@@ -109,8 +106,7 @@ const Link = () => {
                             variant="ghost"
                             onClick={() =>
                                 navigator.clipboard.writeText(base_url + "/" + url?.short_url)
-                            }
-                        >
+                            }>
                             <Copy />
                         </Button>
                         <Button variant="ghost" onClick={downloadImage}>

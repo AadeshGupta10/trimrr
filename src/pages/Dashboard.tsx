@@ -76,7 +76,7 @@ const Dashboard = () => {
                 <Filter className="absolute top-2 right-2 p-1" />
             </div>
             {urls_error && <Form_error field_name={"Error in Getting Url"} message={urls_error?.message} />}
-            {(filteredUrls || []).map((url, i) => (
+            {(filteredUrls || []).reverse().map((url, i) => (
                 <LinkCard key={i} url={url} fetchUrls={() => urls_mutate(user.id)} />
             ))}
         </div>
