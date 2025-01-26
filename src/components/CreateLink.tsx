@@ -96,7 +96,7 @@ export function CreateLink() {
           {errors.longUrl && <Form_error field_name={errors.longUrl} message={errors.longUrl?.message} />}
 
           <div className="flex items-center gap-2">
-            <Card className="p-2">aadesh-trimrr.vercel.app</Card> /
+            {/* <Card className="p-2">aadesh-trimrr.vercel.app</Card> / */}
             <Input
               id="customUrl"
               placeholder="Custom Link (optional)"

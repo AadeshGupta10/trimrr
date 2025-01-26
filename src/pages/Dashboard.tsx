@@ -38,7 +38,6 @@ const Dashboard = () => {
 
     const filteredUrls = urls_data?.filter((url) => (url.title.toLowerCase()).includes(searchQuery.toLowerCase()));
 
-
     return (
         <div className="flex flex-col gap-8">
             {(urls_pending || clicks_pending) && (
