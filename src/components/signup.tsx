@@ -30,13 +30,6 @@ const Signup = () => {
     }
   })
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    profile_pic: null,
-  });
-
   return (
     <div className='flex flex-wrap justify-center items-center select-none border rounded-lg'>
       <div className='p-6 border-1 rounded-lg md:shadow-md w-full flex flex-col gap-3 overflow-y-auto custom-scrollbar'>
