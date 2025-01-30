@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { Outlet } from "react-router-dom"
+import { Toaster } from "@/components/ui/toaster"
 
 const AppLayout = () => {
 
@@ -26,6 +27,7 @@ const AppLayout = () => {
     return (
         <>
             <main className="container mx-auto px-4">
+                <Toaster />
                 <Header />
                 <Outlet />
             </main>

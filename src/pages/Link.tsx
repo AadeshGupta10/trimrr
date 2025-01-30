@@ -10,10 +10,13 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { BarLoader, BeatLoader } from "react-spinners";
+import { useToast } from "@/hooks/use-toast"
 
 const Link = () => {
 
     const base_url = import.meta.env.VITE_REACT_APP_BASE_URL;
+
+    const { toast } = useToast()
 
     const downloadImage = () => {
         const imageUrl = url?.qr;
@@ -104,9 +107,13 @@ const Link = () => {
                     <div className="flex gap-2">
                         <Button
                             variant="ghost"
-                            onClick={() =>
-                                navigator.clipboard.writeText(base_url + "/" + url?.short_url)
-                            }>
+                            onClick={() => {
+                                navigator.clipboard.writeText(`${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`);
+                                toast({
+                                    title: "Trimrr Url is Copied to Clilboard",
+                                    description: `${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`,
+                                })
+                            }}>
                             <Copy />
                         </Button>
                         <Button variant="ghost" onClick={downloadImage}>
