@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Form_error from "./Form_error";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "@/hooks/use-toast";
 
 export function CreateLink() {
 
@@ -28,7 +29,6 @@ export function CreateLink() {
     mutationKey: ["Creating Link"],
     mutationFn: createUrl,
     onSuccess: (data) => {
-      console.log(data);
       !!data && navigate(`/link/${data[0].id}`);
     }
   })
@@ -46,7 +46,9 @@ export function CreateLink() {
         mutate({ ...data, "user_id": user.id, "qrcode": blob });
       }
     } catch (e) {
-      console.error("Error creating link:", e);
+      toast({
+        title: "Error creating link"
+      });
     }
   };
 
@@ -78,7 +80,7 @@ export function CreateLink() {
                 logoImage="/ag_icon_light.png"
                 logoWidth={35}
                 logoHeight={35}
-                />
+              />
             </div>}
 
           <Input

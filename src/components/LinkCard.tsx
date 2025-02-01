@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { deleteUrl } from "@/db/apiUrls";
 import { BeatLoader } from "react-spinners";
 import { useMutation } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "@/hooks/use-toast";
 
 interface Url {
   id: string,
@@ -24,8 +24,6 @@ interface LinkCardProp {
 const LinkCard = ({ url, fetchUrls }: LinkCardProp) => {
 
   const base_url = import.meta.env.VITE_REACT_APP_BASE_URL;
-
-  const { toast } = useToast()
 
   const downloadImage = async () => {
     const imageUrl = url.qr;

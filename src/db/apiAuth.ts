@@ -18,8 +18,6 @@ export const signup = async (e: any) => {
 
   const { name, email, password, image: profile_pic } = e;
 
-  console.log(profile_pic);
-
   const fileName = `dp-${name.split(" ").join("-")}-${Math.random()}`;
 
   const { error: storageError } = await supabase.storage

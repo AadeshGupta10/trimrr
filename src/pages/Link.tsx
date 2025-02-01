@@ -4,19 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { getClicksForUrl } from "@/db/apiClicks";
 import { getUrl, deleteUrl } from "@/db/apiUrls";
+import { toast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { LinkIcon, Copy, Download, Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { BarLoader, BeatLoader } from "react-spinners";
-import { useToast } from "@/hooks/use-toast"
 
 const Link = () => {
 
     const base_url = import.meta.env.VITE_REACT_APP_BASE_URL;
-
-    const { toast } = useToast()
 
     const downloadImage = async () => {
         const imageUrl = url.qr;

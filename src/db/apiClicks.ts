@@ -1,16 +1,6 @@
 import { UAParser } from "ua-parser-js";
 import supabase from "./supabase";
-
-// export async function getClicks() {
-//   let {data, error} = await supabase.from("clicks").select("*");
-
-//   if (error) {
-//     console.error(error);
-//     throw new Error("Unable to load Stats");
-//   }
-
-//   return data;
-// }
+import { toast } from "@/hooks/use-toast";
 
 export const getClicksForUrls = async (e: any) => {
 
@@ -22,7 +12,9 @@ export const getClicksForUrls = async (e: any) => {
     .in("url_id", urlIds);
 
   if (error) {
-    console.error("Error fetching clicks:", error);
+    toast({
+      title: "Error fetching clicks:"
+    });
     return null;
   }
 
@@ -37,7 +29,9 @@ export const getClicksForUrl = async (url_id: string) => {
     .eq("url_id", url_id);
 
   if (error) {
-    console.error(error);
+    toast({
+      title: "Unable to load stats"
+    });
     throw new Error("Unable to load Stats");
   }
 
@@ -68,6 +62,8 @@ export const storeClicks = async (e: any) => {
     // Redirect to the original URL
     window.location.href = originalUrl;
   } catch (error) {
-    console.error("Error recording click:", error);
+    toast({
+      title: "Error recording click:"
+    });
   }
 };

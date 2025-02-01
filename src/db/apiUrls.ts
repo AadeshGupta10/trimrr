@@ -1,3 +1,4 @@
+import { toast } from "@/hooks/use-toast";
 import supabase, { supabaseUrl } from "./supabase";
 
 export const getUrls = async (user_id: string) => {
@@ -41,7 +42,9 @@ export const getLongUrl = async (id: string) => {
     .single();
 
   if (shortLinkError && shortLinkError.code !== "PGRST116") {
-    console.error("Error fetching short link:", shortLinkError);
+    toast({
+      title:"Error fetching short link:"
+    })
     return;
   }
 
