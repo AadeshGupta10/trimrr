@@ -18,30 +18,40 @@ const Link = () => {
 
     const { toast } = useToast()
 
-    const downloadImage = () => {
-        const imageUrl = url?.qr;
-        const fileName = url?.title;
+    const downloadImage = async () => {
+        const imageUrl = url.qr;
+        const fileName = url.title + " QR Code"; // Desired file name for the downloaded image
 
         // Create an anchor element
-        const anchor = document.createElement("a");
-        anchor.href = imageUrl;
-        anchor.download = fileName;
+        try {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
 
-        // Append the anchor to the body
-        document.body.appendChild(anchor);
+            const anchor = document.createElement("a");
+            anchor.href = blobUrl;
+            anchor.download = fileName;
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
 
-        // Trigger the download by simulating a click event
-        anchor.click();
+            // Revoke blob URL to free memory
+            window.URL.revokeObjectURL(blobUrl);
 
-        // Remove the anchor from the document
-        document.body.removeChild(anchor);
+            toast({
+                title: `${fileName} is Downloaded Successfully.`
+            })
+        } catch (error) {
+            toast({
+                title: `Downloading ${fileName} Failed.`
+            })
+        }
     };
 
     const navigate = useNavigate();
     const user = useSelector((state: any) => state.user);
 
     const { id } = useParams();
-    console.log(id);
 
     const { mutate: mutateUrl, isPending: PendingUrlInfo, data: url } = useMutation({
         mutationKey: ["Getting Url Data"],
@@ -110,8 +120,7 @@ const Link = () => {
                             onClick={() => {
                                 navigator.clipboard.writeText(`${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`);
                                 toast({
-                                    title: "Trimrr Url is Copied to Clilboard",
-                                    description: `${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`,
+                                    title: "Url is Copied to Clipboard"
                                 })
                             }}>
                             <Copy />

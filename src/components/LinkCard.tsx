@@ -27,18 +27,34 @@ const LinkCard = ({ url, fetchUrls }: LinkCardProp) => {
 
   const { toast } = useToast()
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     const imageUrl = url.qr;
-    const fileName = url.title; // Desired file name for the downloaded image
+    const fileName = url.title + " QR Code"; // Desired file name for the downloaded image
 
     // Create an anchor element
-    const anchor = document.createElement("a");
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
 
-    anchor.href = imageUrl;
-    anchor.download = fileName;
+      const anchor = document.createElement("a");
+      anchor.href = blobUrl;
+      anchor.download = fileName;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
 
-    // Trigger the download by simulating a click event
-    anchor.click();
+      // Revoke blob URL to free memory
+      window.URL.revokeObjectURL(blobUrl);
+
+      toast({
+        title: `${fileName} is Downloaded Successfully.`
+      })
+    } catch (error) {
+      toast({
+        title: `Downloading ${fileName} Failed.`
+      })
+    }
   };
 
   const { mutate, isPending: loadingDelete } = useMutation({
@@ -82,8 +98,7 @@ const LinkCard = ({ url, fetchUrls }: LinkCardProp) => {
           onClick={() => {
             navigator.clipboard.writeText(`${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`);
             toast({
-              title: "Trimrr Url is Copied to Clilboard",
-              description: `${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`,
+              title: "Url is Copied to Clipboard"
             })
           }}>
           <Copy />

@@ -58,7 +58,7 @@ const Header = () => {
                                     <DropdownMenuItem
                                         onClick={() => mutate()}
                                         className="text-red-500 flex items-center">
-                                        <LogOut className="mr-2 size-4 text-red-500" />
+                                        <LogOut className="size-4 text-red-500" />
                                         <span className="text-red-500">Logout</span>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

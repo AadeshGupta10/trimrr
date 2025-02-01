@@ -74,7 +74,11 @@ export function CreateLink() {
               className="flex justify-center">
               <QRCode
                 size={150}
-                value={watch("longUrl")} />
+                value={watch("longUrl")}
+                logoImage="/ag_icon_light.png"
+                logoWidth={35}
+                logoHeight={35}
+                />
             </div>}
 
           <Input
