@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-// import { Card } from "./ui/card";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRef } from "react";
 import { createUrl } from "@/db/apiUrls";
@@ -35,13 +34,13 @@ export function CreateLink() {
 
   const createNewLink = async (data: object) => {
     try {
-      const canvas = ref.current?.querySelector("canvas");
-      if (!canvas) {
+      const qrCanvas = ref.current?.querySelector("canvas");
+      if (!qrCanvas) {
         console.error("Canvas not found");
         return;
       }
 
-      const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve));
+      const blob = await new Promise<Blob | null>((resolve) => qrCanvas.toBlob(resolve));
       if (blob) {
         mutate({ ...data, "user_id": user.id, "qrcode": blob });
       }

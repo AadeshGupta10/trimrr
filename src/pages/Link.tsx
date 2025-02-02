@@ -92,26 +92,35 @@ const Link = () => {
             )}
             <div className="flex flex-col gap-8 sm:flex-row justify-between">
                 <div className="flex flex-col items-start gap-4 rounded-lg sm:w-2/5">
-                    <span className="text-4xl font-extrabold hover:underline cursor-pointer">
+
+                    {/* Title */}
+                    <span className="text-4xl font-extrabold hover:underline cursor-pointer break-all">
                         {url?.title}
                     </span>
+
+                    {/* Short/Custom Url */}
                     <a
                         href={`${base_url}/${link}`}
                         target="_blank"
-                        className="sm:text-2xl text-blue-400 font-bold hover:underline cursor-pointer">
+                        className="sm:text-2xl text-blue-400 font-bold hover:underline cursor-pointer break-all">
                         {base_url + "/" + link}
                     </a>
+
+                    {/* Original Url */}
                     <a
                         href={url?.original_url}
                         target="_blank"
-                        className="flex items-center gap-1 hover:underline cursor-pointer"
+                        className="flex items-center gap-1 hover:underline cursor-pointer break-all"
                     >
                         <LinkIcon className="p-1" />
-                        {url?.original_url}
+                        {url?.original_url} 
                     </a>
+
+                    {/* Date of Creation */}
                     <span className="flex items-end font-extralight text-sm">
                         {new Date(url?.created_at).toLocaleString()}
                     </span>
+
                     <div className="flex gap-2">
                         <Button
                             variant="ghost"
@@ -140,6 +149,8 @@ const Link = () => {
                             )}
                         </Button>
                     </div>
+
+                    {/* QR Code */}
                     <img
                         src={url?.qr}
                         className="size-72 self-center sm:self-start p-1 object-contain"

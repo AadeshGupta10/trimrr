@@ -67,28 +67,39 @@ const LinkCard = ({ url, fetchUrls }: LinkCardProp) => {
 
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-gray-900 rounded-lg">
+
+      {/* QR Code */}
       <img
         src={url?.qr}
         className="size-28 object-contain self-start"
         alt="qr code" />
+
+      {/* Title */}
       <Link to={`/link/${url?.id}`} className="flex flex-col gap-1 flex-1">
-        <span className="text-xl font-extrabold hover:underline cursor-pointer">
+        <span className="text-xl font-extrabold hover:underline cursor-pointer break-all">
           {url?.title}
         </span>
-        <span className="text-lg text-blue-400 font-bold hover:underline cursor-pointer">
+
+        {/* Short/Custom url */}
+        <span className="text-lg text-blue-400 font-bold hover:underline cursor-pointer break-all">
           <a href={`${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`}>
             {base_url + "/"}{url?.custom_url ? url?.custom_url : url.short_url}
           </a>
         </span>
-        <span className="flex items-center hover:underline cursor-pointer text-sm">
+
+        {/* Original Url */}
+        <span className="flex items-center hover:underline cursor-pointer text-sm break-all">
           <LinkIcon className="p-1 ps-0" />
           <a href={url?.original_url} target="_blank">
             {url?.original_url}
           </a>
         </span>
+
+        {/* Date of Creation */}
         <span className="flex items-end font-extralight text-sm flex-1">
           {new Date(url?.created_at).toLocaleString()}
         </span>
+
       </Link>
       <div className="flex gap-2">
         <Button

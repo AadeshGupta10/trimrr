@@ -9,18 +9,18 @@ import BarLoader from "react-spinners/BarLoader";
 const RedirectLink = () => {
     const { id } = useParams();
 
-    const { mutate, isPending: loadingData } = useMutation({
+    const { mutate, isPending: loadingData, isError } = useMutation({
         mutationKey: ["Getting Original URL"],
         mutationFn: getLongUrl,
         onSuccess: (data) => {
-                storingClicks({
-                    id: data?.id,
-                    originalUrl: data?.original_url,
-                })
+            storingClicks({
+                id: data?.id,
+                originalUrl: data?.original_url,
+            })
         },
         onError: () => {
             toast({
-                title:"Error in Redirecting to Original Page"
+                title: "Error in Redirecting to Original Page"
             });
         }
     })
@@ -36,11 +36,10 @@ const RedirectLink = () => {
 
     if (loadingData || loadingStats) {
         return (
-            <>
+            (loadingData || !isError) ?
                 <BarLoader width={"100%"} color="#36d7b7" />
-                <br />
-                Redirecting...
-            </>
+                :
+                <>Requested url is not valid</>
         );
     }
 
