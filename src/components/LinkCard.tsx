@@ -5,6 +5,7 @@ import { deleteUrl } from "@/db/apiUrls";
 import { BeatLoader } from "react-spinners";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
+import Qr_Generator, { Qr_Downloader } from "./Qr_Generator_&_Downloader";
 
 interface Url {
   id: string,
@@ -25,34 +26,12 @@ const LinkCard = ({ url, fetchUrls }: LinkCardProp) => {
 
   const base_url = import.meta.env.VITE_REACT_APP_BASE_URL;
 
-  const downloadImage = async () => {
-    const imageUrl = url.qr;
+  const downloadImage = () => {
     const fileName = url.title + " QR Code"; // Desired file name for the downloaded image
 
-    // Create an anchor element
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
+    const qr_file = document.getElementById("qr_code_" + url.short_url)?.querySelector("canvas") as HTMLCanvasElement;
 
-      const anchor = document.createElement("a");
-      anchor.href = blobUrl;
-      anchor.download = fileName;
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-
-      // Revoke blob URL to free memory
-      window.URL.revokeObjectURL(blobUrl);
-
-      toast({
-        title: `${fileName} is Downloaded Successfully.`
-      })
-    } catch (error) {
-      toast({
-        title: `Downloading ${fileName} Failed.`
-      })
-    }
+    Qr_Downloader(fileName, qr_file);
   };
 
   const { mutate, isPending: loadingDelete } = useMutation({
@@ -69,10 +48,11 @@ const LinkCard = ({ url, fetchUrls }: LinkCardProp) => {
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-gray-900 rounded-lg">
 
       {/* QR Code */}
-      <img
-        src={url?.qr}
-        className="size-28 object-contain self-start"
-        alt="qr code" />
+      <div id={"qr_code_" + url.short_url}>
+        <Qr_Generator
+          link={`${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`}
+          size={112} />
+      </div>
 
       {/* Title */}
       <Link to={`/link/${url?.id}`} className="flex flex-col gap-1 flex-1">

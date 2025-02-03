@@ -62,8 +62,6 @@ export const storeClicks = async (e: any) => {
     // Redirect to the original URL
     window.location.href = originalUrl;
   } catch (error) {
-    toast({
-      title: "Error recording click:"
-    });
+    console.log(error);
   }
 };

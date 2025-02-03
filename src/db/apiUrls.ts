@@ -1,5 +1,5 @@
 import { toast } from "@/hooks/use-toast";
-import supabase, { supabaseUrl } from "./supabase";
+import supabase from "./supabase";
 
 export const getUrls = async (user_id: string) => {
 
@@ -43,7 +43,7 @@ export const getLongUrl = async (id: string) => {
 
   if (shortLinkError && shortLinkError.code !== "PGRST116") {
     toast({
-      title:"Error fetching short link:"
+      title: "Error fetching short link:"
     })
     return;
   }
@@ -53,20 +53,11 @@ export const getLongUrl = async (id: string) => {
 
 export const createUrl = async (e: any) => {
 
-  const { title, longUrl, customUrl, user_id, qrcode } = e;
+  const { title, longUrl, customUrl, user_id } = e;
 
   if (title.length === 0 || longUrl.length === 0) return;
 
   const short_url = Math.random().toString(36).substr(2, 6);
-  const fileName = `qr-${short_url}`;
-
-  const { error: storageError } = await supabase.storage
-    .from("qrs")
-    .upload(fileName, qrcode);
-
-  if (storageError) throw new Error(storageError.message);
-
-  const qr = `${supabaseUrl}/storage/v1/object/public/qrs/${fileName}`;
 
   const { data, error } = await supabase
     .from("urls")
@@ -77,7 +68,6 @@ export const createUrl = async (e: any) => {
         original_url: longUrl,
         custom_url: customUrl || null,
         short_url,
-        qr,
       },
     ])
     .select();

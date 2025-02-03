@@ -10,12 +10,12 @@ import Link from './pages/Link.tsx'
 import RedirectLink from './pages/RedirectLink.tsx'
 import { Provider } from 'react-redux'
 import { store } from './Store/Store.ts'
+import RequireAuth from './components/RequireAuth.tsx'
 
 import {
   QueryClient,
   QueryClientProvider
 } from '@tanstack/react-query'
-import RequireAuth from './components/RequireAuth.tsx'
 
 const router = createBrowserRouter([
   {
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
         path: "/:id",
         element:
           <RedirectLink />
-      },
+      }
     ]
   }
 ])

@@ -1,5 +1,6 @@
 import DeviceStats from "@/components/DeviceStats";
 import LocationStats from "@/components/LocationStats";
+import Qr_Generator, { Qr_Downloader } from "@/components/Qr_Generator_&_Downloader";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { getClicksForUrl } from "@/db/apiClicks";
@@ -16,34 +17,12 @@ const Link = () => {
 
     const base_url = import.meta.env.VITE_REACT_APP_BASE_URL;
 
-    const downloadImage = async () => {
-        const imageUrl = url.qr;
+    const downloadImage = () => {
         const fileName = url.title + " QR Code"; // Desired file name for the downloaded image
 
-        // Create an anchor element
-        try {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
+        const qr_file = document.getElementById("qr_code_" + url.short_url)?.querySelector("canvas") as HTMLCanvasElement;
 
-            const anchor = document.createElement("a");
-            anchor.href = blobUrl;
-            anchor.download = fileName;
-            document.body.appendChild(anchor);
-            anchor.click();
-            document.body.removeChild(anchor);
-
-            // Revoke blob URL to free memory
-            window.URL.revokeObjectURL(blobUrl);
-
-            toast({
-                title: `${fileName} is Downloaded Successfully.`
-            })
-        } catch (error) {
-            toast({
-                title: `Downloading ${fileName} Failed.`
-            })
-        }
+        Qr_Downloader(fileName, qr_file);
     };
 
     const navigate = useNavigate();
@@ -113,7 +92,7 @@ const Link = () => {
                         className="flex items-center gap-1 hover:underline cursor-pointer break-all"
                     >
                         <LinkIcon className="p-1" />
-                        {url?.original_url} 
+                        {url?.original_url}
                     </a>
 
                     {/* Date of Creation */}
@@ -121,41 +100,46 @@ const Link = () => {
                         {new Date(url?.created_at).toLocaleString()}
                     </span>
 
-                    <div className="flex gap-2">
-                        <Button
-                            variant="ghost"
-                            onClick={() => {
-                                navigator.clipboard.writeText(`${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`);
-                                toast({
-                                    title: "Url is Copied to Clipboard"
-                                })
-                            }}>
-                            <Copy />
-                        </Button>
-                        <Button variant="ghost" onClick={downloadImage}>
-                            <Download />
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            onClick={() =>
-                                typeof id === "string" && mutateDelete(id)
-                            }
-                            disabled={loadingDelete}
-                        >
-                            {loadingDelete ? (
-                                <BeatLoader size={5} color="white" />
-                            ) : (
-                                <Trash />
-                            )}
-                        </Button>
-                    </div>
+                    {
+                        url?.short_url &&
+                        <>
+                            <div className="flex gap-2">
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(`${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`);
+                                        toast({
+                                            title: "Url is Copied to Clipboard"
+                                        })
+                                    }}>
+                                    <Copy />
+                                </Button>
+                                <Button variant="ghost" onClick={downloadImage}>
+                                    <Download />
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() =>
+                                        typeof id === "string" && mutateDelete(id)
+                                    }
+                                    disabled={loadingDelete}
+                                >
+                                    {loadingDelete ? (
+                                        <BeatLoader size={5} color="white" />
+                                    ) : (
+                                        <Trash />
+                                    )}
+                                </Button>
+                            </div>
 
-                    {/* QR Code */}
-                    <img
-                        src={url?.qr}
-                        className="size-72 self-center sm:self-start p-1 object-contain"
-                        alt="qr code"
-                    />
+                            {/* QR Code */}
+                            <div id={"qr_code_" + url.short_url}>
+                                <Qr_Generator
+                                    link={`${base_url + "/"}${url?.custom_url ? url?.custom_url : url.short_url}`}
+                                    size={250} />
+                            </div>
+                        </>
+                    }
                 </div>
 
                 <Card className="sm:w-3/5">

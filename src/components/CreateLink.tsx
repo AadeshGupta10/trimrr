@@ -2,10 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useRef } from "react";
 import { createUrl } from "@/db/apiUrls";
 import { BeatLoader } from "react-spinners";
-import { QRCode } from "react-qrcode-logo";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Form_error from "./Form_error";
@@ -17,39 +15,22 @@ export function CreateLink() {
   const user = useSelector((state: any) => state.user)
 
   const navigate = useNavigate();
-  const ref = useRef<HTMLDivElement | null>(null);
 
   let [searchParams, setSearchParams] = useSearchParams();
-  const longLink = searchParams.get("createNew");
+  const longLink = searchParams.get("createNew"); 
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm()
+  const { register, handleSubmit, formState: { errors } } = useForm()
 
   const { mutate, isPending, isError } = useMutation({
     mutationKey: ["Creating Link"],
     mutationFn: createUrl,
     onSuccess: (data) => {
-      !!data && navigate(`/link/${data[0].id}`);
-    }
-  })
-
-  const createNewLink = async (data: object) => {
-    try {
-      const qrCanvas = ref.current?.querySelector("canvas");
-      if (!qrCanvas) {
-        console.error("Canvas not found");
-        return;
-      }
-
-      const blob = await new Promise<Blob | null>((resolve) => qrCanvas.toBlob(resolve));
-      if (blob) {
-        mutate({ ...data, "user_id": user.id, "qrcode": blob });
-      }
-    } catch (e) {
       toast({
-        title: "Error creating link"
-      });
-    }
-  };
+        title: "Short Url Created Successfully"
+      }),
+      !!data && navigate(`/link/${data[0].id}`);
+    },
+  })
 
   return (
     <Dialog
@@ -66,21 +47,8 @@ export function CreateLink() {
           <DialogTitle className="font-bold text-2xl">Create New</DialogTitle>
         </DialogHeader>
         <form
-          onSubmit={handleSubmit((e) => createNewLink(e))}
+          onSubmit={handleSubmit((e) => mutate({ ...e, "user_id": user.id}))}
           className="flex flex-col gap-5">
-
-          {watch("longUrl") &&
-            <div
-              ref={ref}
-              className="flex justify-center">
-              <QRCode
-                size={150}
-                value={watch("longUrl")}
-                logoImage="/ag_icon_light.png"
-                logoWidth={35}
-                logoHeight={35}
-              />
-            </div>}
 
           <Input
             id="title"
@@ -115,7 +83,6 @@ export function CreateLink() {
             <Button
               type="submit"
               variant="destructive"
-              onClick={createNewLink}
               disabled={isPending}>
               {isPending ? <BeatLoader size={10} color="white" /> : "Create"}
             </Button>
