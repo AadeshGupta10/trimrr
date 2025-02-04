@@ -48,37 +48,14 @@ export const storeClicks = async (e: any) => {
     const res = parser.getResult();
     const device = res.device.type || "Desktop";
 
-    // let city_name: string;
-    // let country: string;
-
-    // let response: Response | { city: string; country_name: string; };
-
-    // try {
-    //   response = await fetch("https://ipapi.co/json");
-    //   if (response.ok) { // Check for successful response (status 200-299)
-    //     const data = await response.json();
-    //     { city: city_name, country_name: country } = data;
-    //     // ... use city and country
-    //     console.log(city, country);
-    //   } else {
-    //     console.error("HTTP error", response.status);
-    //     response = { city: "Unknown", country_name: "Unknown" }
-    //     const { city, country_name: country } = response;
-    //     console.log(city, country);
-    //   }
-    // } catch (error) {
-    //   console.error("Fetch error:", error);
-    //   response = { city: "Unknown", country_name: "Unknown" };
-    //   const { city, country_name: country } = response;
-    //   console.log(city, country);
-    // }
-
+    const response = await fetch("https://ipapi.co/json");
+    const { city, country_name: country } = await response.json();
 
     // Record the click
     await supabase.from("clicks").insert({
       url_id: id,
-      city: "unknown",
-      country: "unknown",
+      city: city,
+      country: country,
       device: device,
     });
 
